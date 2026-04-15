@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -7,10 +7,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
 
-/* ─── Reset & Base ─────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
+/* ─── DARK THEME (default) ─────────────────────────── */
+:root,
+[data-theme="dark"] {
   --bg:         #080d06;
   --surface:    #0e1409;
   --card:       #111a0e;
@@ -29,7 +28,43 @@
   --teal:       #40b890;
   --font-head:  'Syne', sans-serif;
   --font-mono:  'DM Mono', monospace;
+  --grid-line:  rgba(120,190,60,0.025);
+  --skeleton-base: #111a0e;
+  --skeleton-shine: rgba(120,190,60,0.04);
+  --toggle-bg:  #1a2a12;
+  --toggle-border: rgba(120,190,60,0.3);
+  --toggle-icon: "☀️";
+  --shadow:     rgba(0,0,0,0.4);
 }
+
+/* ─── LIGHT THEME ──────────────────────────────────── */
+[data-theme="light"] {
+  --bg:         #f5f7f2;
+  --surface:    #eef2e8;
+  --card:       #ffffff;
+  --border:     rgba(60, 130, 20, 0.18);
+  --accent:     #3c8214;
+  --accent2:    #2d6610;
+  --muted:      #8aab70;
+  --text:       #1a2e0a;
+  --text-dim:   #4a6a30;
+  --gold:       #8a6000;
+  --danger:     #c02020;
+  --blue:       #1868a0;
+  --amber:      #a06000;
+  --coral:      #a04030;
+  --purple:     #6040a0;
+  --teal:       #107860;
+  --grid-line:  rgba(60,130,20,0.04);
+  --skeleton-base: #e8ede0;
+  --skeleton-shine: rgba(60,130,20,0.06);
+  --toggle-bg:  #e0ead4;
+  --toggle-border: rgba(60,130,20,0.3);
+  --shadow:     rgba(0,0,0,0.10);
+}
+
+/* ─── Reset & Base ─────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { font-size: 16px; }
 
@@ -39,15 +74,15 @@ body {
   font-family: var(--font-mono);
   min-height: 100vh;
   overflow-x: hidden;
+  transition: background 0.35s ease, color 0.35s ease;
 }
 
-/* subtle grid overlay */
 body::before {
   content: '';
   position: fixed; inset: 0;
   background-image:
-    linear-gradient(rgba(120,190,60,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(120,190,60,0.025) 1px, transparent 1px);
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 44px 44px;
   pointer-events: none;
   z-index: 0;
@@ -74,19 +109,16 @@ body::before {
   border-bottom: 1px solid var(--border);
 }
 
-.logo-block {}
-
 .logo {
   font-family: var(--font-head);
   font-size: 2.1rem;
   font-weight: 800;
-  color: var(--accent2);
   letter-spacing: -0.03em;
   line-height: 1;
 }
-.logo .rw  { color: #e8f0e0; }
-.logo .ag  { color: var(--accent); }
-.logo .ro  { color: var(--gold); }
+.logo .rw { color: var(--text); }
+.logo .ag { color: var(--accent); }
+.logo .ro { color: var(--gold); }
 
 .tagline {
   font-size: 0.68rem;
@@ -100,9 +132,71 @@ body::before {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 6px;
+  gap: 8px;
 }
 
+/* ─── THEME TOGGLE ─────────────────────────────────── */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--toggle-bg);
+  border: 1px solid var(--toggle-border);
+  border-radius: 100px;
+  padding: 5px 12px 5px 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  user-select: none;
+}
+.theme-toggle:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 12px var(--shadow);
+}
+
+.toggle-track {
+  width: 36px;
+  height: 20px;
+  background: var(--border);
+  border-radius: 100px;
+  position: relative;
+  transition: background 0.3s;
+  border: 1px solid var(--toggle-border);
+}
+[data-theme="light"] .toggle-track {
+  background: rgba(60,130,20,0.2);
+}
+[data-theme="dark"] .toggle-track {
+  background: rgba(120,190,60,0.15);
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 4px var(--shadow);
+}
+[data-theme="light"] .toggle-thumb {
+  transform: translateX(16px);
+}
+
+.toggle-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+}
+.toggle-icon {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+/* ─── Status pill ──────────────────────────────────── */
 .status-pill {
   display: flex;
   align-items: center;
@@ -117,9 +211,9 @@ body::before {
   color: var(--text-dim);
   transition: all 0.35s;
 }
-.status-pill.live   { border-color: rgba(120,190,60,0.45); color: var(--accent); background: rgba(120,190,60,0.08); }
-.status-pill.loading{ border-color: rgba(232,192,64,0.4);  color: var(--gold);   background: rgba(232,192,64,0.06); }
-.status-pill.error  { border-color: rgba(224,88,88,0.4);   color: var(--danger); background: rgba(224,88,88,0.06); }
+.status-pill.live    { border-color: rgba(120,190,60,0.45); color: var(--accent); background: rgba(120,190,60,0.08); }
+.status-pill.loading { border-color: rgba(232,192,64,0.4);  color: var(--gold);   background: rgba(232,192,64,0.06); }
+.status-pill.error   { border-color: rgba(224,88,88,0.4);   color: var(--danger); background: rgba(224,88,88,0.06); }
 
 .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
 .dot.pulse { animation: blink 1.8s ease-in-out infinite; }
@@ -148,10 +242,13 @@ body::before {
   border: 1px solid var(--border);
   color: var(--text-dim);
   background: rgba(120,190,60,0.03);
+  transition: background 0.25s;
 }
-.district-tag .flag { margin-right: 4px; }
+[data-theme="light"] .district-tag {
+  background: rgba(60,130,20,0.05);
+}
 
-/* ─── Metrics Strip ────────────────────────────────── */
+/* ─── Metrics ──────────────────────────────────────── */
 .metrics {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
@@ -166,6 +263,8 @@ body::before {
   opacity: 0;
   transform: translateY(10px);
   animation: fadeUp 0.5s forwards;
+  transition: background 0.35s, border-color 0.35s;
+  box-shadow: 0 2px 8px var(--shadow);
 }
 .metric:nth-child(1){animation-delay:0.04s}
 .metric:nth-child(2){animation-delay:0.08s}
@@ -178,7 +277,7 @@ body::before {
 .metric-value { font-family:var(--font-head); font-size:1.55rem; font-weight:700; color:var(--accent2); line-height:1; }
 .metric-sub   { font-size:0.62rem; color:var(--muted); margin-top:4px; }
 
-/* ─── Best Market Banner ───────────────────────────── */
+/* ─── Best Banner ──────────────────────────────────── */
 .best-banner {
   display: none;
   align-items: center;
@@ -191,6 +290,11 @@ body::before {
   padding: 14px 20px;
   margin-bottom: 1.4rem;
   animation: fadeUp 0.4s forwards;
+  transition: background 0.35s;
+}
+[data-theme="light"] .best-banner {
+  background: linear-gradient(135deg, rgba(60,130,20,0.08), rgba(60,130,20,0.02));
+  border-color: rgba(60,130,20,0.25);
 }
 .best-banner.show { display: flex; }
 
@@ -198,19 +302,19 @@ body::before {
 .best-name { font-family:var(--font-head); font-size:1.25rem; font-weight:700; color:var(--accent2); }
 .best-location { font-size:0.68rem; color:var(--text-dim); margin-top:1px; }
 .best-detail   { font-size:0.65rem; color:var(--muted); margin-top:3px; }
-
 .best-right { text-align:right; }
 .best-badge {
   display: inline-block;
   font-family: var(--font-head);
   font-size: 0.72rem; font-weight: 600;
-  color: var(--bg);
+  color: #fff;
   background: var(--accent);
   padding: 5px 14px;
   border-radius: 100px;
   letter-spacing: 0.05em;
   margin-bottom: 4px;
 }
+[data-theme="light"] .best-badge { color: #fff; }
 .best-premium { font-size: 0.62rem; color: var(--text-dim); }
 
 /* ─── Controls ─────────────────────────────────────── */
@@ -236,8 +340,16 @@ body::before {
   transition: all 0.2s;
   text-transform: uppercase;
 }
-.filter-btn:hover { border-color: rgba(120,190,60,0.38); color: var(--text); }
-.filter-btn.active { background: rgba(120,190,60,0.1); border-color: rgba(120,190,60,0.5); color: var(--accent2); }
+.filter-btn:hover { border-color: var(--accent); color: var(--text); }
+.filter-btn.active {
+  background: rgba(120,190,60,0.1);
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+[data-theme="light"] .filter-btn.active {
+  background: rgba(60,130,20,0.1);
+  color: var(--accent);
+}
 
 .refresh-btn {
   margin-left: auto;
@@ -253,7 +365,7 @@ body::before {
   transition: all 0.2s;
   text-transform: uppercase;
 }
-.refresh-btn:hover { background: rgba(80,168,200,0.11); }
+.refresh-btn:hover { background: rgba(80,168,200,0.12); }
 .refresh-btn:disabled { opacity:0.35; cursor:not-allowed; }
 
 /* ─── Crop Cards ───────────────────────────────────── */
@@ -266,10 +378,11 @@ body::before {
   padding: 18px 22px;
   opacity: 0;
   transform: translateY(12px);
-  transition: border-color 0.3s, box-shadow 0.3s;
+  transition: border-color 0.3s, box-shadow 0.3s, background 0.35s;
+  box-shadow: 0 2px 10px var(--shadow);
 }
 .crop-card.visible { animation: fadeUp 0.45s forwards; }
-.crop-card:hover   { border-color: rgba(120,190,60,0.28); box-shadow: 0 0 20px rgba(120,190,60,0.04); }
+.crop-card:hover   { border-color: var(--accent); box-shadow: 0 4px 20px var(--shadow); }
 
 .crop-header {
   display: flex;
@@ -283,7 +396,6 @@ body::before {
 .crop-icon   { width:30px; height:30px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
 .crop-name   { font-family:var(--font-head); font-size:1.05rem; font-weight:700; color:var(--text); line-height:1.1; }
 .crop-kiny   { font-size:0.62rem; color:var(--text-dim); margin-top:2px; letter-spacing:0.05em; }
-
 .crop-right  { text-align:right; }
 .crop-unit   { font-size:0.62rem; color:var(--text-dim); letter-spacing:0.1em; text-transform:uppercase; }
 .crop-spread { font-size:0.65rem; color:var(--muted); margin-top:2px; }
@@ -298,7 +410,6 @@ body::before {
   align-items: center;
   gap: 10px;
 }
-
 .bar-label {
   font-size: 0.66rem;
   color: var(--text-dim);
@@ -311,11 +422,16 @@ body::before {
 
 .bar-track {
   height: 20px;
-  background: rgba(255,255,255,0.03);
+  background: rgba(120,190,60,0.06);
   border-radius: 4px;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  transition: background 0.35s;
 }
+[data-theme="light"] .bar-track {
+  background: rgba(60,130,20,0.07);
+}
+
 .bar-fill {
   height: 100%;
   border-radius: 4px;
@@ -330,18 +446,31 @@ body::before {
   background: rgba(255,255,255,0.22);
   border-radius: 0 4px 4px 0;
 }
+[data-theme="light"] .bar-fill::after {
+  background: rgba(255,255,255,0.4);
+}
 
-/* bar colour variants */
+/* bar colours — dark theme */
 .bar-green  { background: linear-gradient(90deg, #1e4a0a, #2e7018); }
 .bar-teal   { background: linear-gradient(90deg, #0a3a30, #187860); }
 .bar-amber  { background: linear-gradient(90deg, #4a2800, #885010); }
 .bar-coral  { background: linear-gradient(90deg, #4a1808, #883428); }
 .bar-purple { background: linear-gradient(90deg, #281848, #604888); }
 .bar-blue   { background: linear-gradient(90deg, #081840, #205888); }
-.bar-best   { background: linear-gradient(90deg, #386810, var(--accent)); }
+.bar-best   { background: linear-gradient(90deg, #386810, #78be3c); }
+
+/* bar colours — light theme overrides */
+[data-theme="light"] .bar-green  { background: linear-gradient(90deg, #4a9a1e, #6ab830); }
+[data-theme="light"] .bar-teal   { background: linear-gradient(90deg, #107860, #20a880); }
+[data-theme="light"] .bar-amber  { background: linear-gradient(90deg, #885010, #b87820); }
+[data-theme="light"] .bar-coral  { background: linear-gradient(90deg, #883428, #b85040); }
+[data-theme="light"] .bar-purple { background: linear-gradient(90deg, #604888, #8068b0); }
+[data-theme="light"] .bar-blue   { background: linear-gradient(90deg, #205888, #4080b0); }
+[data-theme="light"] .bar-best   { background: linear-gradient(90deg, #3c8214, #5aaa20); }
 
 .bar-price      { font-size:0.67rem; color:var(--text); text-align:right; white-space:nowrap; }
-.bar-price.best { color:var(--accent2); font-weight:500; }
+.bar-price.best { color:var(--accent); font-weight:600; }
+.best-star { font-size:0.6rem; color:var(--accent); margin-left:3px; }
 
 .change-pill {
   font-size: 0.58rem;
@@ -350,11 +479,11 @@ body::before {
   text-align: center;
   white-space: nowrap;
 }
-.change-up   { background: rgba(120,190,60,0.12);  color: var(--accent); border:1px solid rgba(120,190,60,0.2); }
-.change-down { background: rgba(224,88,88,0.10);   color: var(--danger); border:1px solid rgba(224,88,88,0.2); }
-.change-flat { background: rgba(255,255,255,0.04); color: var(--muted);  border:1px solid rgba(255,255,255,0.06); }
-
-.best-star { font-size:0.6rem; color:var(--accent); margin-left:3px; }
+.change-up   { background: rgba(120,190,60,0.12); color: var(--accent); border:1px solid rgba(120,190,60,0.2); }
+.change-down { background: rgba(224,88,88,0.10);  color: var(--danger); border:1px solid rgba(224,88,88,0.2); }
+.change-flat { background: rgba(0,0,0,0.04);       color: var(--muted);  border:1px solid var(--border); }
+[data-theme="light"] .change-up   { background: rgba(60,130,20,0.1); }
+[data-theme="light"] .change-flat { background: rgba(0,0,0,0.04); }
 
 /* ─── Skeleton ─────────────────────────────────────── */
 .skeleton {
@@ -362,15 +491,15 @@ body::before {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 12px;
-  background-image: linear-gradient(90deg, var(--card) 0%, rgba(120,190,60,0.04) 50%, var(--card) 100%);
+  background-image: linear-gradient(90deg, var(--skeleton-base) 0%, var(--skeleton-shine) 50%, var(--skeleton-base) 100%);
   background-size: 200% 100%;
   animation: shimmer 1.6s infinite;
 }
 @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
-/* ─── Price Table View ─────────────────────────────── */
+/* ─── Table View ───────────────────────────────────── */
 .table-view { display:none; }
-.table-view.active { display:block; }
+.table-view.active { display:block; overflow-x:auto; }
 
 .price-table {
   width: 100%;
@@ -378,7 +507,7 @@ body::before {
   font-size: 0.72rem;
 }
 .price-table th {
-  background: rgba(120,190,60,0.08);
+  background: rgba(120,190,60,0.1);
   color: var(--accent);
   font-family: var(--font-head);
   font-size: 0.65rem;
@@ -386,23 +515,24 @@ body::before {
   text-transform: uppercase;
   padding: 10px 14px;
   text-align: left;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 2px solid var(--border);
+}
+[data-theme="light"] .price-table th {
+  background: rgba(60,130,20,0.08);
 }
 .price-table td {
   padding: 9px 14px;
-  border-bottom: 1px solid rgba(120,190,60,0.06);
+  border-bottom: 1px solid var(--border);
   color: var(--text);
+  background: var(--card);
+  transition: background 0.35s;
 }
-.price-table tr:hover td { background: rgba(120,190,60,0.03); }
-.price-table .best-cell { color:var(--accent2); font-weight:500; }
-.price-table .market-name { color:var(--text-dim); }
+.price-table tr:hover td { background: rgba(120,190,60,0.04); }
+[data-theme="light"] .price-table tr:hover td { background: rgba(60,130,20,0.04); }
+.price-table .best-cell  { color:var(--accent); font-weight:600; }
 
 /* ─── View Toggle ──────────────────────────────────── */
-.view-toggle {
-  display: flex;
-  gap: 6px;
-  margin-left: 8px;
-}
+.view-toggle { display: flex; gap: 6px; margin-left: 8px; }
 .view-btn {
   font-family: var(--font-mono);
   font-size: 0.62rem;
@@ -416,7 +546,8 @@ body::before {
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-.view-btn.active { background: rgba(120,190,60,0.1); color: var(--accent); border-color: rgba(120,190,60,0.35); }
+.view-btn.active { background: rgba(120,190,60,0.1); color: var(--accent); border-color: var(--accent); }
+[data-theme="light"] .view-btn.active { background: rgba(60,130,20,0.1); }
 
 /* ─── Footer ───────────────────────────────────────── */
 .footer-ts {
@@ -431,15 +562,16 @@ body::before {
   padding-top: 1rem;
   border-top: 1px solid var(--border);
 }
-.footer-note { color: rgba(120,190,60,0.3); }
+.footer-note { color: var(--accent); opacity: 0.5; }
 
 /* ─── Responsive ───────────────────────────────────── */
 @media (max-width: 680px) {
   .bar-row { grid-template-columns: 95px 1fr 80px 50px; gap:7px; }
-  .logo    { font-size: 1.6rem; }
+  .logo { font-size: 1.6rem; }
   .metric-value { font-size: 1.25rem; }
-  .bar-label    { font-size: 0.58rem; }
-  .change-pill  { display: none; }
+  .bar-label { font-size: 0.58rem; }
+  .change-pill { display: none; }
+  .toggle-label { display: none; }
 }
 @media (max-width: 440px) {
   .bar-row { grid-template-columns: 80px 1fr 72px; }
@@ -459,7 +591,17 @@ body::before {
       </div>
       <div class="tagline">🇷🇼 Ibiciro by'Isoko · Rwanda Local Market Intelligence</div>
     </div>
+
     <div class="header-right">
+      <!-- THEME TOGGLE -->
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle light/dark mode" title="Toggle light/dark mode">
+        <span class="toggle-icon" id="toggleIcon">☀️</span>
+        <div class="toggle-track">
+          <div class="toggle-thumb"></div>
+        </div>
+        <span class="toggle-label" id="toggleLabel">Light</span>
+      </button>
+
       <div class="status-pill loading" id="statusPill">
         <span class="dot pulse"></span>
         <span id="statusText">Loading prices…</span>
@@ -468,15 +610,15 @@ body::before {
     </div>
   </header>
 
-  <!-- ── District Coverage Strip ── -->
-  <div class="district-strip" id="districtStrip">
-    <span class="district-tag"><span class="flag">📍</span>Kigali City</span>
-    <span class="district-tag"><span class="flag">📍</span>Muhanga</span>
-    <span class="district-tag"><span class="flag">📍</span>Huye</span>
-    <span class="district-tag"><span class="flag">📍</span>Musanze</span>
-    <span class="district-tag"><span class="flag">📍</span>Rubavu</span>
-    <span class="district-tag"><span class="flag">📍</span>Nyagatare</span>
-    <span class="district-tag"><span class="flag">📍</span>Rusizi</span>
+  <!-- ── District Strip ── -->
+  <div class="district-strip">
+    <span class="district-tag">📍 Kigali City</span>
+    <span class="district-tag">📍 Muhanga</span>
+    <span class="district-tag">📍 Huye</span>
+    <span class="district-tag">📍 Musanze</span>
+    <span class="district-tag">📍 Rubavu</span>
+    <span class="district-tag">📍 Nyagatare</span>
+    <span class="district-tag">📍 All Provinces</span>
   </div>
 
   <!-- ── Metrics ── -->
@@ -566,72 +708,53 @@ body::before {
 
 <script>
 /* ═══════════════════════════════════════════════════════
-   RWANDA LOCAL MARKETS — 7 markets across all provinces
+   THEME TOGGLE
+   ═══════════════════════════════════════════════════════ */
+function toggleTheme() {
+  const html     = document.documentElement;
+  const isDark   = html.getAttribute('data-theme') === 'dark';
+  const newTheme = isDark ? 'light' : 'dark';
+
+  html.setAttribute('data-theme', newTheme);
+  localStorage.setItem('rwandaAgro_theme', newTheme);
+
+  document.getElementById('toggleIcon').textContent  = newTheme === 'dark' ? '☀️' : '🌙';
+  document.getElementById('toggleLabel').textContent = newTheme === 'dark' ? 'Light' : 'Dark';
+}
+
+// Restore saved theme on load
+(function() {
+  const saved = localStorage.getItem('rwandaAgro_theme');
+  if (saved) {
+    document.documentElement.setAttribute('data-theme', saved);
+    document.getElementById('toggleIcon').textContent  = saved === 'dark' ? '☀️' : '🌙';
+    document.getElementById('toggleLabel').textContent = saved === 'dark' ? 'Light' : 'Dark';
+  }
+})();
+
+/* ═══════════════════════════════════════════════════════
+   RWANDA LOCAL MARKETS
    ═══════════════════════════════════════════════════════ */
 const MARKETS = [
-  { id: "nyabugogo",  name: "Nyabugogo",        district: "Kigali / Nyarugenge",  short: "Nyabugogo"  },
-  { id: "kimironko",  name: "Kimironko",         district: "Kigali / Gasabo",      short: "Kimironko"  },
-  { id: "muhanga",    name: "Muhanga Market",    district: "Southern / Muhanga",   short: "Muhanga"    },
-  { id: "huye",       name: "Huye Market",       district: "Southern / Huye",      short: "Huye"       },
-  { id: "musanze",    name: "Musanze Market",    district: "Northern / Musanze",   short: "Musanze"    },
-  { id: "rubavu",     name: "Rubavu / Gisenyi",  district: "Western / Rubavu",     short: "Rubavu"     },
-  { id: "nyagatare",  name: "Nyagatare Market",  district: "Eastern / Nyagatare",  short: "Nyagatare"  },
+  { id:"nyabugogo",  name:"Nyabugogo",       district:"Kigali / Nyarugenge",  short:"Nyabugogo"  },
+  { id:"kimironko",  name:"Kimironko",        district:"Kigali / Gasabo",      short:"Kimironko"  },
+  { id:"muhanga",    name:"Muhanga Market",   district:"Southern / Muhanga",   short:"Muhanga"    },
+  { id:"huye",       name:"Huye Market",      district:"Southern / Huye",      short:"Huye"       },
+  { id:"musanze",    name:"Musanze Market",   district:"Northern / Musanze",   short:"Musanze"    },
+  { id:"rubavu",     name:"Rubavu / Gisenyi", district:"Western / Rubavu",     short:"Rubavu"     },
+  { id:"nyagatare",  name:"Nyagatare Market", district:"Eastern / Nyagatare",  short:"Nyagatare"  },
 ];
 
 /* ═══════════════════════════════════════════════════════
    CROPS — 6 staple crops with Kinyarwanda names
-   Base prices in RWF/kg — realistic 2025 Rwanda data
    ═══════════════════════════════════════════════════════ */
 const CROPS = [
-  {
-    name:    "Ibigori",
-    english: "Maize",
-    icon:    "🌽",
-    iconBg:  "#1a3a08",
-    unit:    "RWF/kg",
-    // Nyabugogo, Kimironko, Muhanga, Huye, Musanze, Rubavu, Nyagatare
-    base:    [320, 310, 290, 280, 340, 305, 270],
-  },
-  {
-    name:    "Ibishyimbo",
-    english: "Beans",
-    icon:    "🫘",
-    iconBg:  "#3a1808",
-    unit:    "RWF/kg",
-    base:    [580, 600, 540, 520, 610, 555, 500],
-  },
-  {
-    name:    "Tamato",
-    english: "Tomatoes",
-    icon:    "🍅",
-    iconBg:  "#3a0808",
-    unit:    "RWF/kg",
-    base:    [480, 520, 400, 380, 560, 510, 350],
-  },
-  {
-    name:    "Ibirayi",
-    english: "Potatoes",
-    icon:    "🥔",
-    iconBg:  "#2a1e08",
-    unit:    "RWF/kg",
-    base:    [250, 260, 230, 220, 310, 240, 200],
-  },
-  {
-    name:    "Umuceli",
-    english: "Rice",
-    icon:    "🌾",
-    iconBg:  "#08202a",
-    unit:    "RWF/kg",
-    base:    [920, 950, 880, 860, 940, 900, 830],
-  },
-  {
-    name:    "Ingano",
-    english: "Wheat",
-    icon:    "🌿",
-    iconBg:  "#1a1a08",
-    unit:    "RWF/kg",
-    base:    [440, 455, 420, 400, 430, 415, 390],
-  },
+  { name:"Ibigori",    english:"Maize",    icon:"🌽", iconBg:"#1a3a08", unit:"RWF/kg", base:[320,310,290,280,340,305,270] },
+  { name:"Ibishyimbo", english:"Beans",    icon:"🫘", iconBg:"#3a1808", unit:"RWF/kg", base:[580,600,540,520,610,555,500] },
+  { name:"Tamato",     english:"Tomatoes", icon:"🍅", iconBg:"#3a0808", unit:"RWF/kg", base:[480,520,400,380,560,510,350] },
+  { name:"Ibirayi",    english:"Potatoes", icon:"🥔", iconBg:"#2a1e08", unit:"RWF/kg", base:[250,260,230,220,310,240,200] },
+  { name:"Umuceli",    english:"Rice",     icon:"🌾", iconBg:"#08202a", unit:"RWF/kg", base:[920,950,880,860,940,900,830] },
+  { name:"Ingano",     english:"Wheat",    icon:"🌿", iconBg:"#1a1a08", unit:"RWF/kg", base:[440,455,420,400,430,415,390] },
 ];
 
 const BAR_COLORS = ["bar-green","bar-teal","bar-amber","bar-coral","bar-purple","bar-blue","bar-best"];
@@ -646,14 +769,11 @@ let activeView   = "bars";
 let refreshTimer = null;
 
 /* ═══════════════════════════════════════════════════════
-   SIMULATED DATA FETCH
-   In production: replace simulateFetch() with:
-   const res  = await fetch("https://api.minagri.gov.rw/v1/market-prices?country=RW");
-   const json = await res.json();
+   SIMULATED FETCH
+   Replace with: const res = await fetch("https://api.minagri.gov.rw/v1/market-prices");
    ═══════════════════════════════════════════════════════ */
 function simulateFetch() {
   return new Promise(resolve => {
-    const delay = 600 + Math.random() * 500;
     setTimeout(() => {
       const data = CROPS.map(crop => ({
         name:    crop.name,
@@ -663,80 +783,67 @@ function simulateFetch() {
         unit:    crop.unit,
         markets: MARKETS.map((mkt, i) => ({
           ...mkt,
-          // Realistic ±10% variance per refresh
           price: Math.round(crop.base[i] * (0.90 + Math.random() * 0.20)),
         }))
       }));
       resolve(data);
-    }, delay);
+    }, 600 + Math.random() * 500);
   });
 }
 
 /* ═══════════════════════════════════════════════════════
    HELPERS
    ═══════════════════════════════════════════════════════ */
-function fmt(n) { return n.toLocaleString('en-RW'); }
+const fmt = n => n.toLocaleString('en-RW');
 
 function timeNow() {
   return new Date().toLocaleTimeString('en-RW', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
 }
-
 function weekLabel() {
-  const d = new Date();
-  const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
-  return d.toLocaleDateString('en-RW', opts);
+  return new Date().toLocaleDateString('en-RW', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
 }
 
 function findBestMarket(data) {
   const totals = {};
-  MARKETS.forEach(m => totals[m.id] = { name: m.name, district: m.district, total: 0 });
-  data.forEach(crop => {
-    crop.markets.forEach(m => { totals[m.id].total += m.price; });
-  });
-  const sorted = Object.values(totals).sort((a, b) => b.total - a.total);
-  const best   = sorted[0];
-  const worst  = sorted[sorted.length - 1];
+  MARKETS.forEach(m => totals[m.id] = { name:m.name, district:m.district, total:0 });
+  data.forEach(crop => crop.markets.forEach(m => { totals[m.id].total += m.price; }));
+  const sorted = Object.values(totals).sort((a,b) => b.total - a.total);
   return {
-    name:    best.name,
-    district: best.district,
-    avgPrice: Math.round(best.total / data.length),
-    premium:  Math.round(((best.total - worst.total) / worst.total) * 100),
+    name:    sorted[0].name,
+    district: sorted[0].district,
+    avgPrice: Math.round(sorted[0].total / data.length),
+    premium:  Math.round(((sorted[0].total - sorted[sorted.length-1].total) / sorted[sorted.length-1].total) * 100),
   };
 }
 
 function priceChange(cropName, marketId) {
   if (!prevData) return 0;
   const prev = prevData.find(c => c.name === cropName);
-  if (!prev) return 0;
-  const mkt  = prev.markets.find(m => m.id === marketId);
-  if (!mkt) return 0;
-  const curr = currentData.find(c => c.name === cropName)
-                            ?.markets.find(m => m.id === marketId);
-  if (!curr) return 0;
-  return curr.price - mkt.price;
+  const curr = currentData.find(c => c.name === cropName);
+  if (!prev || !curr) return 0;
+  const pm = prev.markets.find(m => m.id === marketId);
+  const cm = curr.markets.find(m => m.id === marketId);
+  return (pm && cm) ? cm.price - pm.price : 0;
 }
 
 function changePill(diff) {
-  if (diff > 0)  return `<span class="change-pill change-up">▲ ${fmt(diff)}</span>`;
-  if (diff < 0)  return `<span class="change-pill change-down">▼ ${fmt(Math.abs(diff))}</span>`;
+  if (diff > 0) return `<span class="change-pill change-up">▲ ${fmt(diff)}</span>`;
+  if (diff < 0) return `<span class="change-pill change-down">▼ ${fmt(Math.abs(diff))}</span>`;
   return `<span class="change-pill change-flat">—</span>`;
 }
 
 /* ═══════════════════════════════════════════════════════
-   RENDER — METRICS
+   RENDER
    ═══════════════════════════════════════════════════════ */
 function renderMetrics(data) {
   const allPrices = data.flatMap(c => c.markets.map(m => m.price));
-  const avg = Math.round(allPrices.reduce((a,b) => a+b, 0) / allPrices.length);
-
-  // Biggest spread (max - min) across all crops
+  const avg = Math.round(allPrices.reduce((a,b)=>a+b,0) / allPrices.length);
   let maxSpread = 0;
   data.forEach(crop => {
     const prices = crop.markets.map(m => m.price);
     const spread = Math.max(...prices) - Math.min(...prices);
     if (spread > maxSpread) maxSpread = spread;
   });
-
   document.getElementById("m-markets").textContent = MARKETS.length;
   document.getElementById("m-crops").textContent   = data.length;
   document.getElementById("m-avg").textContent     = fmt(avg);
@@ -745,31 +852,21 @@ function renderMetrics(data) {
   document.getElementById("weekLabel").textContent = weekLabel();
 }
 
-/* ═══════════════════════════════════════════════════════
-   RENDER — BEST MARKET BANNER
-   ═══════════════════════════════════════════════════════ */
 function renderBest(data) {
-  const best   = findBestMarket(data);
-  const banner = document.getElementById("bestBanner");
-  banner.classList.add("show");
-  document.getElementById("bestName").textContent     = best.name;
-  document.getElementById("bestLocation").textContent = best.district;
-  document.getElementById("bestBadge").textContent    = fmt(best.avgPrice) + " RWF/kg avg";
-  document.getElementById("bestPremium").textContent  = `+${best.premium}% above lowest market`;
+  const best = findBestMarket(data);
+  document.getElementById("bestBanner").classList.add("show");
+  document.getElementById("bestName").textContent    = best.name;
+  document.getElementById("bestLocation").textContent= best.district;
+  document.getElementById("bestBadge").textContent   = fmt(best.avgPrice) + " RWF/kg avg";
+  document.getElementById("bestPremium").textContent = `+${best.premium}% above lowest market`;
 }
 
-/* ═══════════════════════════════════════════════════════
-   RENDER — CROP CARDS (BAR VIEW)
-   ═══════════════════════════════════════════════════════ */
 function renderBars(data) {
   const bestMarket = findBestMarket(data).name;
-  const visible    = activeFilter === "all"
-    ? data
-    : data.filter(c => c.name === activeFilter);
+  const visible    = activeFilter === "all" ? data : data.filter(c => c.name === activeFilter);
+  const grid       = document.getElementById("cropsGrid");
 
-  const grid = document.getElementById("cropsGrid");
-
-  const cardsHTML = visible.map((crop, ci) => {
+  grid.innerHTML = visible.map((crop, ci) => {
     const prices   = crop.markets.map(m => m.price);
     const maxPrice = Math.max(...prices);
     const minPrice = Math.min(...prices);
@@ -780,7 +877,6 @@ function renderBars(data) {
       const pct      = Math.round((m.price / (maxPrice * 1.08)) * 100);
       const colClass = isBest ? "bar-best" : BAR_COLORS[i % (BAR_COLORS.length - 1)];
       const diff     = priceChange(crop.name, m.id);
-
       return `
         <div class="bar-row">
           <div class="bar-label">
@@ -816,9 +912,6 @@ function renderBars(data) {
       </div>`;
   }).join("");
 
-  grid.innerHTML = cardsHTML;
-
-  // Animate bars after DOM paint
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       grid.querySelectorAll(".bar-fill").forEach(bar => {
@@ -828,26 +921,18 @@ function renderBars(data) {
   });
 }
 
-/* ═══════════════════════════════════════════════════════
-   RENDER — PRICE TABLE VIEW
-   ═══════════════════════════════════════════════════════ */
 function renderTable(data) {
   const bestMarket = findBestMarket(data).name;
-  const visible    = activeFilter === "all"
-    ? data
-    : data.filter(c => c.name === activeFilter);
+  const visible    = activeFilter === "all" ? data : data.filter(c => c.name === activeFilter);
 
-  // Header
-  const thead = document.getElementById("tableHead");
-  thead.innerHTML = `<th>Igihingwa / Crop</th>` +
+  document.getElementById("tableHead").innerHTML =
+    `<th>Igihingwa / Crop</th>` +
     MARKETS.map(m => `<th>${m.short}</th>`).join("") +
     `<th>Best Market</th>`;
 
-  // Rows
-  const tbody = document.getElementById("tableBody");
-  tbody.innerHTML = visible.map(crop => {
+  document.getElementById("tableBody").innerHTML = visible.map(crop => {
     const maxPrice = Math.max(...crop.markets.map(m => m.price));
-    const cells = crop.markets.map(m => {
+    const cells    = crop.markets.map(m => {
       const isBest = m.price === maxPrice;
       return `<td class="${isBest ? 'best-cell' : ''}">${fmt(m.price)}${isBest ? ' ★' : ''}</td>`;
     }).join("");
@@ -855,7 +940,7 @@ function renderTable(data) {
     return `
       <tr>
         <td><strong>${crop.icon} ${crop.name}</strong><br>
-            <span style="color:var(--muted);font-size:0.6rem">${crop.english}</span></td>
+          <span style="color:var(--muted);font-size:0.6rem">${crop.english}</span></td>
         ${cells}
         <td class="best-cell">${bestMkt.short}</td>
       </tr>`;
@@ -863,7 +948,7 @@ function renderTable(data) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   VIEW TOGGLE
+   VIEW TOGGLE / FILTER / STATUS
    ═══════════════════════════════════════════════════════ */
 function setView(view) {
   activeView = view;
@@ -871,35 +956,21 @@ function setView(view) {
   document.getElementById("tableView").style.display = view === "table" ? "block" : "none";
   document.getElementById("vBars").classList.toggle("active",  view === "bars");
   document.getElementById("vTable").classList.toggle("active", view === "table");
-  if (currentData) {
-    if (view === "bars")  renderBars(currentData);
-    if (view === "table") renderTable(currentData);
-  }
+  if (currentData) { renderBars(currentData); renderTable(currentData); }
 }
 
-/* ═══════════════════════════════════════════════════════
-   STATUS PILL
-   ═══════════════════════════════════════════════════════ */
-function setStatus(state) {
-  const pill = document.getElementById("statusPill");
-  const txt  = document.getElementById("statusText");
-  pill.className = "status-pill " + state;
-  if      (state === "loading") txt.textContent = "Loading prices…";
-  else if (state === "live")    txt.textContent = "Live · Data fresh";
-  else                          txt.textContent = "Error · Retrying";
-}
-
-/* ═══════════════════════════════════════════════════════
-   FILTER
-   ═══════════════════════════════════════════════════════ */
 function filterCrop(name, btn) {
   activeFilter = name;
   document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
   btn.classList.add("active");
-  if (currentData) {
-    renderBars(currentData);
-    renderTable(currentData);
-  }
+  if (currentData) { renderBars(currentData); renderTable(currentData); }
+}
+
+function setStatus(state) {
+  const pill = document.getElementById("statusPill");
+  const txt  = document.getElementById("statusText");
+  pill.className = "status-pill " + state;
+  txt.textContent = state === "loading" ? "Loading prices…" : state === "live" ? "Live · Data fresh" : "Error · Retrying";
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -912,27 +983,25 @@ async function loadData() {
 
   try {
     prevData    = currentData ? JSON.parse(JSON.stringify(currentData)) : null;
-    const data  = await simulateFetch();
-    currentData = data;
+    currentData = await simulateFetch();
 
-    renderMetrics(data);
-    renderBest(data);
-    renderBars(data);
-    renderTable(data);
+    renderMetrics(currentData);
+    renderBest(currentData);
+    renderBars(currentData);
+    renderTable(currentData);
 
-    const now = new Date();
-    const dateStr = now.toLocaleDateString('en-RW', { weekday:'short', year:'numeric', month:'short', day:'numeric' });
+    const dateStr = new Date().toLocaleDateString('en-RW', { weekday:'short', year:'numeric', month:'short', day:'numeric' });
     document.getElementById("footerTs").innerHTML =
       `<span>RwandaAgroPrice · Prices as of ${dateStr} · ${timeNow()}</span>
-       <span class="footer-note">Data refreshes every 30s · Prices in RWF/kg · For use by Rwandan farmers</span>`;
+       <span class="footer-note">Data refreshes every 30s · Prices in RWF/kg · For Rwandan farmers</span>`;
 
     setStatus("live");
-  } catch (err) {
-    console.error("Error:", err);
+  } catch(err) {
+    console.error(err);
     setStatus("error");
     document.getElementById("cropsGrid").innerHTML =
       `<div style="color:var(--danger);font-size:0.85rem;padding:2rem;text-align:center;background:var(--card);border-radius:12px;border:1px solid rgba(224,88,88,0.2)">
-        Ntabikorwa · Failed to load market data. Check connection and retry.
+         Ntabikorwa · Failed to load market data. Check connection and retry.
        </div>`;
   } finally {
     btn.disabled = false;
