@@ -99,10 +99,10 @@ No database, no server, no special software needed.
 
 ---
 
-## 👥 Group 5 — Team Members
+##  Group 5 — Team Members
 
 | # | Name |
-|---|---|---|
+|---|---|
 | 1 | Nwanochiri Ogochukwu GloriaMary |
 | 2 | Cyizere Ishema Delice Darlene |
 | 3 | Bol Alol Mayen |
