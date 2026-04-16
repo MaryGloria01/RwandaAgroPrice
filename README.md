@@ -99,17 +99,18 @@ No database, no server, no special software needed.
 
 ---
 
-##  Group 5 — Team Members
+## 👥 Group 5 — Team Members
 
-| # | Name 
+| # | Name |
 |---|---|---|
-| 1 | Nwanochiri Ogochukwu GloriaMary
-| 2 | Cyizere Ishema Delice Darlene
-| 3 | Bol Alol Mayen
-| 4 | Edou Obiang Lewis
-| 5 | Buay Biel Nienkel
-| 6 | Abrahim Dixon
-| 7 | Niyonsaba Enock
+| 1 | Nwanochiri Ogochukwu GloriaMary |
+| 2 | Cyizere Ishema Delice Darlene |
+| 3 | Bol Alol Mayen |
+| 4 | Edou Obiang Lewis |
+| 5 | Buay Biel Nienkel |
+| 6 | Abrahim Dixon |
+| 7 | Niyonsaba Enock |
+
 ---
 
 ##  Academic Context
