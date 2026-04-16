@@ -10,7 +10,7 @@
 
 ##  About This Project
 
-**RwandaAgroPrice** is a web-based market price decision support dashboard built as a group assignment for the **Distributed and Cloud Computing (CSC422)** module at the **University of Kigali**, Year 4, Trimester 2, Academic Year 2024/2025.
+**RwandaAgroPrice** is a web-based market price decision support dashboard built as a group assignment for the **Distributed and Cloud Computing (CSC422)** module at the **University of Kigali**.
 
 The system addresses a real problem faced by Rwandan smallholder farmers — **information asymmetry in agricultural markets**. Farmers often sell their produce at the nearest market without knowing that a market 10–15 km away may be paying up to 40% more for the same crop. This dashboard gives them the price comparison they need, at the moment they need it.
 
