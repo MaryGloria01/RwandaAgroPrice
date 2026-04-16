@@ -119,10 +119,6 @@ No database, no server, no special software needed.
 | Institution | University of Kigali |
 | School | School of Computing and Information Technology |
 | Module | CSC422 — Distributed and Cloud Computing |
-| Assignment | Assignment 1 — Cloud Architecture Design & Distributed Systems Analysis |
-| Level | Year 3, Bachelor of Science in Computer Science / IT / Business IT |
-| Academic Year | 2024 / 2025 |
-| Examiner | Happy Axel Muyombano |
 
 ---
 
